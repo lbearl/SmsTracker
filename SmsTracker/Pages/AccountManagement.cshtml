@@ -1,0 +1,49 @@
+@page
+@using SmsTracker.Models
+@model SmsTracker.Pages.AccountManagement
+
+@{
+    ViewData["Title"] = "Number Management";
+}
+
+<div class="text-center">
+    <form method="post">
+        <input type="hidden" asp-for="Account.Id"/>
+        <div class="form-group">
+            <label asp-for="Account.AccountName"></label>
+
+            <input type="text" class="form-control" placeholder="Pucci The Dog" asp-for="Account.AccountName"/>
+        </div>
+        <div class="form-group">
+            <label asp-for="Account.PrimaryPhone"></label>
+
+            <input type="tel" class="form-control" asp-for="Account.PrimaryPhone"/>
+        </div>
+
+        <input type="submit"/>
+    </form>
+    
+    <a asp-page="@nameof(PhoneNumbers)" asp-route-accountid="@Model.Account.Id" >Add number</a>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Notes</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach(var number in Model.Account.AssociatedNumbers)
+        {
+            <tr>
+                <td>@number.PublicName</td>
+                <td>@number.PhoneNumber</td>
+                <td>@number.Notes</td>
+                <td>DELETE?</td>
+            </tr>
+    
+        }
+        </tbody>
+    </table>
+</div>

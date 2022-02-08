@@ -1,0 +1,29 @@
+@page "{AccountId}"
+@model SmsTracker.Pages.PhoneNumbers
+
+
+@{
+    ViewData["Title"] = "Number Management";
+}
+
+<div class="text-center">
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="Number.Name"></label>
+
+            <input type="text" class="form-control" placeholder="Jane Doe" asp-for="Number.Name"/>
+        </div>
+        <div class="form-group">
+            <label asp-for="Number.PhoneNumber"></label>
+
+            <input type="tel" class="form-control" asp-for="Number.PhoneNumber"/>
+        </div>
+        <div class="form-group">
+            <label asp-for="Number.Notes"></label>
+
+            <textarea class="form-control" asp-for="Number.Notes"></textarea>
+        </div>
+
+        <input type="submit"/>
+    </form>
+</div>
