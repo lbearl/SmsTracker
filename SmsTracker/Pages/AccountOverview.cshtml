@@ -1,0 +1,26 @@
+@page
+@model SmsTracker.Pages.AccountOverview
+
+@{
+    ViewData["Title"] = "Number Management";
+}
+
+<a asp-page="@nameof(AccountManagement)">Create New</a>
+<table class="table">
+    <thead>
+    <tr><th>
+        Account Name
+    </th>
+        <th>Actions</th></tr>
+    </thead>
+    <tbody>
+    @foreach (var account in Model.Accounts)
+    {
+        <tr>
+            <td>@account.AccountName</td>
+            <td><a asp-page="@nameof(AccountManagement)" asp-route-accountid="@account.Id">GO</a></td>
+        </tr>
+    }
+    </tbody>
+</table>
+

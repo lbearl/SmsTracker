@@ -17,6 +17,10 @@ public class AccountManagement : PageModel
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
     }
 
+    [FromRoute] public int? AccountId { get; set; }
+
+    public bool IsNew { get; set; } = false;
+
     [BindProperty] public AccountViewModel Account { get; set; } = new AccountViewModel();
 
     public async Task<IActionResult> OnGetAsync()
@@ -25,16 +29,25 @@ public class AccountManagement : PageModel
             User.Identity != null && x.Email == User.Identity.Name);
         if (user is null) throw new InvalidOperationException("Please log in!");
 
-        var account = await _dbContext.Accounts.Include(x=>x.AssociatedNumbers).FirstOrDefaultAsync(x => x.OwnedByUserId == user.Id) ?? new Account();
+        var account = await _dbContext.Accounts.Include(x => x.AssociatedNumbers)
+            .FirstOrDefaultAsync(x => x.Id == AccountId);
+        
+        if (account is null)
+        {
+            IsNew = true;
+            account = new Account();
+        }
 
         Account = new AccountViewModel
         {
+            
             AccountName = account.AccountName,
             AssociatedNumbers = account.AssociatedNumbers.ToList(),
             Id = account.Id,
-            PrimaryPhone = account.PrimaryPhone
         };
-        
+
+        PrettyPrintPhoneNumbers(Account.AssociatedNumbers);
+
         return Page();
     }
 
@@ -51,35 +64,37 @@ public class AccountManagement : PageModel
 
         await TryUpdateModelAsync(account, nameof(Account));
         // Make sure that the account's primary phone is in e164 format.
-        account.PrimaryPhone = GetE164FormattedNumber(Account.PrimaryPhone);
         account.OwnedByUser = user;
         account.OwnedByUserId = user.Id;
 
-        _dbContext.Accounts.Add(account);
+        if(IsNew)
+            _dbContext.Accounts.Add(account);
+        else
+            _dbContext.Accounts.Update(account);
+        
         await _dbContext.SaveChangesAsync();
 
-        return RedirectToPage("./Index");
+        return RedirectToPage(nameof(AccountManagement), new { AccountId = account.Id });
     }
 
-    private string GetE164FormattedNumber(string input)
+
+    private List<Number> PrettyPrintPhoneNumbers(List<Number> numbers)
     {
         var util = PhoneNumberUtil.GetInstance();
+        foreach (var n in numbers)
+        {
+            var parsed = util.Parse(n.PhoneNumber, "US");
+            n.PhoneNumber = util.Format(parsed, PhoneNumberFormat.NATIONAL);
+        }
 
-        var normalized = PhoneNumberUtil.Normalize(input);
-        var converted = util.Parse(normalized, "US");
-
-        return util.Format(converted, PhoneNumberFormat.E164);
+        return numbers;
     }
 
     public class AccountViewModel
     {
         public int Id { get; set; }
-        [Required, MaxLength(100)]
-        public string AccountName { get; set; }
-    
-        [Phone, Required]
-        public string PrimaryPhone { get; set; }
-    
+        [Required, MaxLength(100)] public string AccountName { get; set; }
+
         public virtual List<Number> AssociatedNumbers { get; set; } = new List<Number>();
     }
 }

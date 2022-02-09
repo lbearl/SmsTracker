@@ -23,7 +23,7 @@ public class SmsController : TwilioController
         // this is an e.164 number
         var from = incomingMessage.From;
 
-        var account = await _dbContext.Accounts.FirstOrDefaultAsync(x => x.PrimaryPhone == from);
+        var account = await _dbContext.Numbers.Include(x=>x.Account).FirstOrDefaultAsync(x => x.PhoneNumber == from);
 
         if (account is null)
         {
@@ -34,8 +34,8 @@ public class SmsController : TwilioController
             response.Message("Got it! Added to tracking.");
             var trackedItem = new TrackedItem
             {
-                OwnedByAccount = account,
-                OwnedByAccountId = account.Id,
+                OwnedByAccount = account.Account,
+                OwnedByAccountId = account.Account.Id,
                 CreatedOn = DateTime.Now,
                 Text = incomingMessage.Body
             };
