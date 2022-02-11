@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SmsTracker.Data;
 using SmsTracker.Models;
 
-namespace SmsTracker.Pages;
+namespace SmsTracker.Pages.Tracker;
 
 public class AccountOverview : PageModel
 {

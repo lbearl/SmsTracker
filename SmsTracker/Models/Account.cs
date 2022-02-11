@@ -21,4 +21,7 @@ public class Account
     /// Determines if this is the primary account. Can only have one per user.
     /// </summary>
     public bool IsPrimary { get; set; }
+    
+    [MaxLength(5)]
+    public string? Prefix { get; set; }
 }

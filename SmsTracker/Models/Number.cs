@@ -10,7 +10,7 @@ public class Number
     public string PublicName { get; set; }
     [Phone, Required]
     public string PhoneNumber { get; set; }
-    public string Notes { get; set; }
+    public string? Notes { get; set; }
     
     public int AccountId { get; set; }
     

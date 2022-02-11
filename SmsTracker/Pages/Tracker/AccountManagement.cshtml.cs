@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using PhoneNumbers;
+using SmsTracker.Constants;
 using SmsTracker.Data;
 using SmsTracker.Models;
+using SmsTracker.Validation;
 
-namespace SmsTracker.Pages;
+namespace SmsTracker.Pages.Tracker;
 
 public class AccountManagement : PageModel
 {
@@ -19,9 +21,9 @@ public class AccountManagement : PageModel
 
     [FromRoute] public int? AccountId { get; set; }
 
-    public bool IsNew { get; set; } = false;
+    public bool IsNew { get; set; }
 
-    [BindProperty] public AccountViewModel Account { get; set; } = new AccountViewModel();
+    [BindProperty] public AccountViewModel Account { get; set; } = new();
 
     public async Task<IActionResult> OnGetAsync()
     {
@@ -37,16 +39,17 @@ public class AccountManagement : PageModel
             IsNew = true;
             account = new Account();
         }
-
+        
         Account = new AccountViewModel
         {
-            
+            IsPrimary = account.IsPrimary,
+            Prefix = account.Prefix,
             AccountName = account.AccountName,
             AssociatedNumbers = account.AssociatedNumbers.ToList(),
             Id = account.Id,
         };
 
-        PrettyPrintPhoneNumbers(Account.AssociatedNumbers);
+        Account.AssociatedNumbers = PrettyPrintPhoneNumbers(Account.AssociatedNumbers).ToList();
 
         return Page();
     }
@@ -60,8 +63,15 @@ public class AccountManagement : PageModel
             User.Identity != null && x.Email == User.Identity.Name);
         if (user is null) throw new InvalidOperationException("User is not logged in");
 
-        var account = await _dbContext.Accounts.FirstOrDefaultAsync(x => x.OwnedByUserId == user.Id) ?? new Account();
-
+        var account = await _dbContext.Accounts.Include(x => x.AssociatedNumbers)
+            .FirstOrDefaultAsync(x => x.Id == AccountId);
+        
+        if (account is null)
+        {
+            IsNew = true;
+            account = new Account();
+        }
+        
         await TryUpdateModelAsync(account, nameof(Account));
         // Make sure that the account's primary phone is in e164 format.
         account.OwnedByUser = user;
@@ -74,27 +84,34 @@ public class AccountManagement : PageModel
         
         await _dbContext.SaveChangesAsync();
 
-        return RedirectToPage(nameof(AccountManagement), new { AccountId = account.Id });
+        return RedirectToPage(NavigationConstants.TrackerPages.AccountManagement, new { AccountId = account.Id });
     }
 
 
-    private List<Number> PrettyPrintPhoneNumbers(List<Number> numbers)
+    private IEnumerable<Number> PrettyPrintPhoneNumbers(List<Number> numbers)
     {
         var util = PhoneNumberUtil.GetInstance();
         foreach (var n in numbers)
         {
             var parsed = util.Parse(n.PhoneNumber, "US");
             n.PhoneNumber = util.Format(parsed, PhoneNumberFormat.NATIONAL);
-        }
 
-        return numbers;
+            yield return n;
+        }
     }
 
     public class AccountViewModel
     {
         public int Id { get; set; }
-        [Required, MaxLength(100)] public string AccountName { get; set; }
+        [Required, MaxLength(100), Display(Name = "Account Name")] public string AccountName { get; set; } = null!;
 
         public virtual List<Number> AssociatedNumbers { get; set; } = new List<Number>();
+        
+        [Display(Name = "Is Primary Account?")]
+        public bool IsPrimary { get; set; }
+        
+        [Display(Name = "Account Prefix (for inbound SMS)")]
+        [MaxLength(5), RequiredIfFalse(nameof(IsPrimary), ErrorMessage = "Prefix must be set for non-primary accounts.")]
+        public string? Prefix { get; set; }
     }
 }

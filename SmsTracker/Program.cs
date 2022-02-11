@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SmsTracker.Constants;
 using SmsTracker.Data;
 using SmsTracker.Options;
 using SmsTracker.Services;
@@ -14,7 +15,10 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AuthorizeFolder(NavigationConstants.Tracker);
+});
 
 builder.Services.AddSingleton<TwilioService>();
 builder.Services.AddOptions<TwilioOptions>().BindConfiguration(TwilioOptions.Twilio);

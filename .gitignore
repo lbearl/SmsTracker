@@ -3,3 +3,6 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+SmsTracker/app.db
+SmsTracker/app.db-shm
+SmsTracker/app.db-wal
