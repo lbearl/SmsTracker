@@ -58,7 +58,8 @@ public class SmsController : TwilioController
                     OwnedByAccount = scopedAccount,
                     OwnedByAccountId = scopedAccount.Id,
                     CreatedOn = DateTime.Now,
-                    Text = incomingMessage.Body
+                    // Remove the prefix from the persisted message.
+                    Text = incomingMessage.Body[prefix.Length..]
                 };
 
                 _dbContext.TrackedItems.Add(trackedItem);

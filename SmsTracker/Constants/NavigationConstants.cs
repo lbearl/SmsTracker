@@ -9,5 +9,6 @@ public static class NavigationConstants
         public const string AccountManagement = $"{Tracker}AccountManagement";
         public const string AccountOverview = $"{Tracker}AccountOverview";
         public const string PhoneNumbers = $"{Tracker}PhoneNumbers";
+        public const string Calendar = $"{Tracker}Calendar";
     }
 }

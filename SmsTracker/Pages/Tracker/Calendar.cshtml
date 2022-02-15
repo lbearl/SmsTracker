@@ -1,0 +1,39 @@
+@page "{AccountId?}"
+@model SmsTracker.Pages.Tracker.Calendar
+
+@{
+    ViewData["Title"] = "Calendar View";
+}
+
+<select asp-for="AccountId" asp-items="Model.Accounts"></select>
+<div id="calendar"></div>
+
+@section Scripts
+{
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.css" integrity="sha256-jLWPhwkAHq1rpueZOKALBno3eKP3m4IMB131kGhAlRQ=" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js" integrity="sha256-YicH/8aE660iEnJtgll3vT54dJApy3XkYmqNfGVFEzA=" crossorigin="anonymous"></script>
+
+    <script>
+    $(() => { 
+        $('#AccountId').on('change', () => {
+            window.location = '/tracker/calendar/' + $('#AccountId').val()
+        });
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+    
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialDate: '2022-02-01',
+          dayMaxEvents: true,
+          eventSources: {
+          url: '/calendar/getevents',
+          method: 'get',
+          extraParams: {
+              'accountId': '@Model.AccountId'
+          }
+          }});
+        
+        calendar.render();
+        });
+    </script>
+}
