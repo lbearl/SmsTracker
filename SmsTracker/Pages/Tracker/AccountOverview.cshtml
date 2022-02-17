@@ -3,10 +3,10 @@
 @model SmsTracker.Pages.Tracker.AccountOverview
 
 @{
-    ViewData["Title"] = "Number Management";
+    ViewData["Title"] = "Account Overview";
 }
 
-<a asp-page="@NavigationConstants.TrackerPages.AccountManagement">Create New</a>
+<a class="btn btn-primary" asp-page="@NavigationConstants.TrackerPages.AccountManagement">Create New</a>
 <table class="table">
     <thead>
     <tr><th>
@@ -19,7 +19,7 @@
     {
         <tr>
             <td>@account.AccountName</td>
-            <td><a asp-page="@NavigationConstants.TrackerPages.AccountManagement" asp-route-accountid="@account.Id">GO</a></td>
+            <td><a class="btn btn-primary" asp-page="@NavigationConstants.TrackerPages.AccountManagement" asp-route-accountid="@account.Id">View</a></td>
         </tr>
     }
     </tbody>

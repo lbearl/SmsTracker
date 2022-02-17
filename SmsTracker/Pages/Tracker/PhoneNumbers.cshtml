@@ -8,22 +8,31 @@
 
 <div>
     <form method="post">
-        <div class="form-group">
-            <label asp-for="Number.Name"></label>
+        <div class="row mb-2">
+            <div class="col">
+                <label class="form-label" asp-for="Number.Name"></label>
 
-            <input type="text" class="form-control" placeholder="Jane Doe" asp-for="Number.Name"/>
+                <input type="text" class="form-control" placeholder="Jane Doe" asp-for="Number.Name"/>
+            </div>
+            <div class="col">
+                <label class="form-label" asp-for="Number.PhoneNumber"></label>
+
+                <input type="tel" class="form-control" asp-for="Number.PhoneNumber"/>
+            </div>
         </div>
-        <div class="form-group">
-            <label asp-for="Number.PhoneNumber"></label>
+        <div class="row">
+            <div class="col">
+                <label class="form-label" asp-for="Number.Notes"></label>
 
-            <input type="tel" class="form-control" asp-for="Number.PhoneNumber"/>
+                <textarea class="form-control" asp-for="Number.Notes"></textarea>
+            </div>
         </div>
-        <div class="form-group">
-            <label asp-for="Number.Notes"></label>
-
-            <textarea class="form-control" asp-for="Number.Notes"></textarea>
+        <div class="row mt-2">
+            <div class="col">
+                <input class="btn btn-primary" type="submit" value="Save"/>
+            </div>
         </div>
 
-        <input type="submit"/>
+
     </form>
 </div>

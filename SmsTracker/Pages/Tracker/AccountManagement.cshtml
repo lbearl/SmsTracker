@@ -1,6 +1,5 @@
 @page "{AccountId?}"
 @using SmsTracker.Constants
-@using SmsTracker.Models
 @model SmsTracker.Pages.Tracker.AccountManagement
 
 @{
@@ -10,27 +9,40 @@
 <div>
     <form method="post">
         <input type="hidden" asp-for="Account.Id"/>
-        <div class="form-group">
-            <label asp-for="Account.AccountName"></label>
+        <div class="row mb-3">
+            <div class="col-md-2">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" asp-for="Account.IsPrimary">
+                                <label class="form-check-label" asp-for="Account.IsPrimary"></label>
+                            </div>
+                        </div>
+            <div class="col-md-10">
+                <label class="form-label" asp-for="Account.AccountName"></label>
 
-            <input type="text" class="form-control" placeholder="Pucci The Dog" asp-for="Account.AccountName"/>
+                <input type="text" class="form-control" placeholder="Pucci The Dog" asp-for="Account.AccountName"/>
+            </div>
+
         </div>
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" asp-for="Account.IsPrimary">
-            <label class="form-check-label" asp-for="Account.IsPrimary"></label>
+        <div class="row mb-3">
+            <div class="col-md-2"></div>
+            <div class="col-md-4 mb-1" id="account-prefix">
+                <label class="form-label" asp-for="Account.Prefix"></label>
+                <input type="text" class="form-control" asp-for="Account.Prefix" disabled="@Model.Account.IsPrimary"/>
+            </div>
+            <div class="col-4 mt-auto ms-auto">
+                <button type="submit" class="btn btn-primary">Save</button> 
+                @if (!Model.IsNew)
+                {
+                    <a class="btn btn-secondary" asp-page="@NavigationConstants.TrackerPages.PhoneNumbers" asp-route-accountid="@Model.Account.Id">Add number</a>
+                }
+                </div>
         </div>
-        <div class="form-group">
-            <label asp-for="Account.Prefix"></label>
         
-            <input type="text" class="form-control" asp-for="Account.Prefix" disabled="@Model.Account.IsPrimary"/>
-        </div>
-        
-        <input type="submit"/>
     </form>
-    
+
     @if (!Model.IsNew)
     {
-        <a asp-page="@NavigationConstants.TrackerPages.PhoneNumbers" asp-route-accountid="@Model.Account.Id">Add number</a>
+        
         <table class="table">
             <thead>
             <tr>
@@ -47,9 +59,12 @@
                     <td>@number.PublicName</td>
                     <td>@number.PhoneNumber</td>
                     <td>@number.Notes</td>
-                    <td>DELETE?</td>
+                    <td>
+                        <form asp-controller="Account" asp-action="DeleteNumber" asp-route-numberId="@number.Id">
+                            <button type="submit" class="btn btn-primary">Delete</button>
+                        </form>
+                    </td>
                 </tr>
-
             }
             </tbody>
         </table>

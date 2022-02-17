@@ -5,7 +5,9 @@
     ViewData["Title"] = "Calendar View";
 }
 
-<select asp-for="AccountId" asp-items="Model.Accounts"></select>
+<div class="col-4">
+    <select class="form-select" asp-for="AccountId" asp-items="Model.Accounts"></select>
+</div>
 <div id="calendar"></div>
 
 @section Scripts

@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmsTracker.Data;
-using SmsTracker.Models;
 
 namespace SmsTracker.Controllers;
 
