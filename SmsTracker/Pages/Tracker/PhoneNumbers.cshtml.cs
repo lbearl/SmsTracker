@@ -57,12 +57,12 @@ public class PhoneNumbers : PageModel
         }
         catch (NumberParseException npe)
         {
-            ModelState.AddModelError(nameof(PhoneNumber), npe.Message);
+            ModelState.AddModelError("Number.PhoneNumber", npe.Message);
             return Page();
         }
         catch (DuplicateNumberException)
         {
-            ModelState.AddModelError(nameof(PhoneNumber), "This number is already registered by someone else.");
+            ModelState.AddModelError("Number.PhoneNumber", "This number is already registered by someone else.");
             return Page();
         }
 

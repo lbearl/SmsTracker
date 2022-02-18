@@ -13,11 +13,13 @@
                 <label class="form-label" asp-for="Number.Name"></label>
 
                 <input type="text" class="form-control" placeholder="Jane Doe" asp-for="Number.Name"/>
+                <span asp-validation-for="Number.Name" class="text-danger"></span>
             </div>
             <div class="col">
                 <label class="form-label" asp-for="Number.PhoneNumber"></label>
 
                 <input type="tel" class="form-control" asp-for="Number.PhoneNumber"/>
+                <span asp-validation-for="Number.PhoneNumber" class="text-danger"></span>
             </div>
         </div>
         <div class="row">
@@ -25,6 +27,7 @@
                 <label class="form-label" asp-for="Number.Notes"></label>
 
                 <textarea class="form-control" asp-for="Number.Notes"></textarea>
+                <span asp-validation-for="Number.Notes" class="text-danger"></span>
             </div>
         </div>
         <div class="row mt-2">
@@ -36,3 +39,8 @@
 
     </form>
 </div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

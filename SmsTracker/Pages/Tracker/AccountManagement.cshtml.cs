@@ -69,7 +69,7 @@ public class AccountManagement : PageModel
         // If we have something else that is marked as primary with a different AccountId, we have an issue.
         if (await accounts.AnyAsync(x => x.IsPrimary && Account.IsPrimary && x.Id != AccountId))
         {
-            ModelState.AddModelError(nameof(Account.IsPrimary), "Can't have multiple primary accounts.");
+            ModelState.AddModelError("Account.IsPrimary", "Can't have multiple primary accounts.");
             return Page();
         }
 
