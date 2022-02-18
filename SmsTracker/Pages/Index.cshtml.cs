@@ -1,25 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using SmsTracker.Constants;
 using SmsTracker.Services;
 
 namespace SmsTracker.Pages;
 
 public class IndexModel : PageModel
 {
-    private readonly ILogger<IndexModel> _logger;
-    private readonly TwilioService _twilioService;
 
-    public IndexModel(ILogger<IndexModel> logger, TwilioService twilioService)
+
+    public IndexModel()
     {
-        _logger = logger;
-        _twilioService = twilioService ?? throw new ArgumentNullException(nameof(twilioService));
+
     }
 
-    public void OnGet()
+    public IActionResult OnGet()
     {
-    }
+        if (User.Identity?.IsAuthenticated ?? false)
+        {
+            return RedirectToPage(NavigationConstants.TrackerPages.Calendar);
+        }
 
-    public async Task OnPostAsync()
-    {
-        await _twilioService.SendSms("+17638071516", "Test from tracker.");
+        return Page();
     }
 }

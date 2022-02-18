@@ -47,6 +47,16 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
+/* Disable this to re-enable user registration */
+app.UseEndpoints(ep =>
+{
+    ep.MapGet("/Identity/Account/Register",
+        ctx => Task.Factory.StartNew(() => ctx.Response.Redirect("/Identity/Account/Login", false, true)));
+    ep.MapPost("/Identity/Account/Register",
+        ctx => Task.Factory.StartNew(() => ctx.Response.Redirect("/Identity/Account/Login", false, true)));
+
+});
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Sms}/{action=Index}/{id?}");
