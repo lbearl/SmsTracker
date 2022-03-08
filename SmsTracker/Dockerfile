@@ -5,10 +5,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["SmsTracker/SmsTracker.csproj", "SmsTracker/"]
-RUN dotnet restore "SmsTracker/SmsTracker.csproj"
+COPY ["SmsTracker.csproj", "."]
+RUN dotnet restore "SmsTracker.csproj"
 COPY . .
-WORKDIR "/src/SmsTracker"
+WORKDIR "/src"
 RUN dotnet build "SmsTracker.csproj" -c Release -o /app/build
 
 FROM build AS publish
