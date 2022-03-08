@@ -25,7 +25,7 @@
         var calendarEl = document.getElementById('calendar');
     
         var calendar = new FullCalendar.Calendar(calendarEl, {
-          initialDate: '2022-02-01',
+          initialDate: '@(new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("yyyy-MM-dd"))',
           dayMaxEvents: true,
           eventSources: {
           url: '/calendar/getevents',

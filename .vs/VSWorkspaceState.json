@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\SmsTracker",
+    "\\SmsTracker\\Areas",
+    "\\SmsTracker\\Areas\\Identity",
+    "\\SmsTracker\\Areas\\Identity\\Pages",
+    "\\SmsTracker\\Controllers"
+  ],
+  "SelectedNode": "\\SmsTracker\\Program.cs",
+  "PreviewInSolutionExplorer": false
+}

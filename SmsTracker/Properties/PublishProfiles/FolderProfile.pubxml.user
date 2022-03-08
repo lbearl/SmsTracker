@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>C:\Users\lbear\source\repos\lbearl\SmsTracker\SmsTracker\bin\Release\net6.0\publish\</_PublishTargetUrl>
+    <History>False|2022-03-08T15:01:59.3628027Z;</History>
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>DataSource=app.db%3bCache=Shared</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="SmsTracker.Data.ApplicationDbContext">
+      <Value>DataSource=app.db%3bCache=Shared</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>
